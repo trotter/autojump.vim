@@ -3,3 +3,4 @@
 * Refactor autojump.vim to have less duplication
 * Bundle using .vba
 * Upload to vimscripts
+* Add per project support
