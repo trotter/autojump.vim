@@ -1,0 +1,5 @@
+* Don't store __vi__ type paths in our jumpstats
+* Support opening buffers that have only been opened once
+* Refactor autojump.vim to have less duplication
+* Bundle using .vba
+* Upload to vimscripts
