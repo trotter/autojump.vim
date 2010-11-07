@@ -2,7 +2,7 @@ autojump.vim
 ============
 
 Integrates [autojump](https://github.com/joelthelion/autojump) with
-(vim)[http://www.vim.org/], allowing you to open and edit files with ease.
+[vim](http://www.vim.org/), allowing you to open and edit files with ease.
 
 If anyone out there is a hardcore vim hacker, please help me by forking this project and improving it. See the list of necessary enhancements in `./TODO`.
 
