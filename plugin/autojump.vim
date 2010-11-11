@@ -11,16 +11,16 @@ let g:loaded_autojump = 1
 
 " Stores an opened buffer in autojumps history
 function! autojump#store_file(path)
-  silent! exec '!'.'AUTOJUMP_DATA_DIR=~/.vim autojump -a ' . a:path
+  silent! exec '!AUTOJUMP_DATA_DIR=~/.vim autojump -a '.a:path
 endfunction
 
 " Show the current jumpstats
 function! autojump#jumpstat()
-  exec '!'.'AUTOJUMP_DATA_DIR=~/.vim autojump --stat'
+  exec '!AUTOJUMP_DATA_DIR=~/.vim autojump --stat'
 endfunction
 
 function! autojump#completion(ArgLead, CmdLine, CurorPos)
-  let paths = system('AUTOJUMP_DATA_DIR=~/.vim autojump --completion ' . a:ArgLead)
+  let paths = system('AUTOJUMP_DATA_DIR=~/.vim autojump --completion '.a:ArgLead)
   return paths
 endfunction
 
