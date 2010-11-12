@@ -12,27 +12,55 @@
 " The root directory in which we will store all autojump files
 let s:data_dir=expand("~/.autojump.vim")
 let s:global_dir=expand(s:data_dir.'/global')
+let s:project_dir=expand(s:data_dir.'/projects/'.getcwd())
 
 " Stores an opened buffer in autojumps history
 function! autojump#store_file(path)
+  silent! exec '!'.autojump#autojump_cmd(s:project_dir, '-a '.a:path)
   silent! exec '!'.autojump#autojump_cmd(s:global_dir, '-a '.a:path)
 endfunction
 
 " Show the current jumpstats
+" Currently only shows global stats
 function! autojump#jumpstat()
   exec '!'.autojump#autojump_cmd(s:global_dir, '--stat')
 endfunction
 
-function! autojump#completion(ArgLead, CmdLine, CurorPos)
-  let paths = system(autojump#autojump_cmd(s:global_dir, '--completion '.a:ArgLead))
-  if paths == ""
-    return split(globpath(&path, a:ArgLead."*"), "\n")
-  endif
+function! autojump#completion_for(dir, ArgLead, CmdLine, CursorPos)
+  let paths = system(autojump#autojump_cmd(a:dir, '--completion '.a:ArgLead))
   return split(paths, "\n")
 endfunction
 
+function! autojump#completion(ArgLead, CmdLine, CursorPos)
+  " Any ideas for cleaning up this duplication?
+  " Project completion
+  let paths = autojump#completion_for(s:project_dir, a:ArgLead, a:CmdLine, a:CursorPos)
+  if paths != []
+    return paths
+  endif
+
+  " Global completion
+  let paths = autojump#completion_for(s:global_dir, a:ArgLead, a:CmdLine, a:CursorPos)
+  if paths != []
+    return paths
+  endif
+
+  " Fallback to normal file completion
+  return split(globpath(&path, a:ArgLead."*"), "\n")
+endfunction
+
 function! autojump#complete(fragment)
-  return system(autojump#autojump_cmd(s:global_dir, a:fragment))
+  let path = system(autojump#autojump_cmd(s:project_dir, a:fragment))
+  if path != ""
+    return path
+  end
+
+  path = system(autojump#autojump_cmd(s:global_dir, a:fragment))
+  if path != ""
+    return path
+  end
+
+  return a:fragment
 endfunction
 
 function! autojump#jump(fragment)
@@ -49,6 +77,7 @@ endfunction
 
 function! autojump#create_data_dir()
   call autojump#create_dir(s:global_dir)
+  call autojump#create_dir(s:project_dir)
 endfunction
 
 function! autojump#autojump_cmd(data_dir, cmd)
