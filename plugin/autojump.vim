@@ -24,8 +24,6 @@ function! autojump#jumpstat()
 endfunction
 
 function! autojump#completion(ArgLead, CmdLine, CurorPos)
-  let s:data_dir=expand("~/.autojump.vim")
-  let s:global_dir=expand(s:data_dir.'/global')
   let paths = system(autojump#autojump_cmd(s:global_dir, '--completion '.a:ArgLead))
   if paths == ""
     return split(globpath(&path, a:ArgLead."*"), "\n")
