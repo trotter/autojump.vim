@@ -33,7 +33,10 @@ function! autojump#jump(fragment)
   exec 'edit '.path
 endfunction
 
-autocmd BufNewFile,BufRead,BufWrite * call autojump#store_file('<amatch>')
+augroup autojump
+  autocmd!
+  autocmd BufNewFile,BufRead,BufWrite * call autojump#store_file('<amatch>')
+augroup END
 
 command! JumpStat :call autojump#jumpstat()
 command! -nargs=1 -complete=custom,autojump#completion J :call autojump#jump(<f-args>)
