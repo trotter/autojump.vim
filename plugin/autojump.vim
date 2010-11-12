@@ -4,10 +4,10 @@
 
 " Install in ~/.vim/autoload
 
-" if exists("g:loaded_autojump") || &cp
-"   finish
-" endif
-" let g:loaded_autojump = 1
+if exists("g:loaded_autojump") || &cp
+  finish
+endif
+let g:loaded_autojump = 1
 
 " Stores an opened buffer in autojumps history
 function! autojump#store_file(path)
