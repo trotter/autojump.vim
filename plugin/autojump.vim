@@ -4,10 +4,10 @@
 
 " Install in ~/.vim/autoload
 
-if exists("g:loaded_autojump") || &cp
-  finish
-endif
-let g:loaded_autojump = 1
+" if exists("g:loaded_autojump") || &cp
+"   finish
+" endif
+" let g:loaded_autojump = 1
 
 " Stores an opened buffer in autojumps history
 function! autojump#store_file(path)
@@ -21,7 +21,10 @@ endfunction
 
 function! autojump#completion(ArgLead, CmdLine, CurorPos)
   let paths = system('AUTOJUMP_DATA_DIR=~/.vim autojump --completion '.a:ArgLead)
-  return paths
+  if paths == ""
+    return split(globpath(&path, a:ArgLead."*"), "\n")
+  endif
+  return split(paths, "\n")
 endfunction
 
 function! autojump#complete(fragment)
@@ -39,4 +42,4 @@ augroup autojump
 augroup END
 
 command! JumpStat :call autojump#jumpstat()
-command! -nargs=1 -complete=custom,autojump#completion J :call autojump#jump(<f-args>)
+command! -nargs=1 -complete=customlist,autojump#completion J :call autojump#jump(<f-args>)
