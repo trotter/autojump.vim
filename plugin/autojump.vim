@@ -4,23 +4,29 @@
 
 " Install in ~/.vim/autoload
 
-if exists("g:loaded_autojump") || &cp
-  finish
-endif
-let g:loaded_autojump = 1
+" if exists("g:loaded_autojump") || &cp
+"   finish
+" endif
+" let g:loaded_autojump = 1
+
+" The root directory in which we will store all autojump files
+let s:data_dir=expand("~/.autojump.vim")
+let s:global_dir=expand(s:data_dir.'/global')
 
 " Stores an opened buffer in autojumps history
 function! autojump#store_file(path)
-  silent! exec '!AUTOJUMP_DATA_DIR=~/.vim autojump -a '.a:path
+  silent! exec '!'.autojump#autojump_cmd(s:global_dir, '-a '.a:path)
 endfunction
 
 " Show the current jumpstats
 function! autojump#jumpstat()
-  exec '!AUTOJUMP_DATA_DIR=~/.vim autojump --stat'
+  exec '!'.autojump#autojump_cmd(s:global_dir, '--stat')
 endfunction
 
 function! autojump#completion(ArgLead, CmdLine, CurorPos)
-  let paths = system('AUTOJUMP_DATA_DIR=~/.vim autojump --completion '.a:ArgLead)
+  let s:data_dir=expand("~/.autojump.vim")
+  let s:global_dir=expand(s:data_dir.'/global')
+  let paths = system(autojump#autojump_cmd(s:global_dir, '--completion '.a:ArgLead))
   if paths == ""
     return split(globpath(&path, a:ArgLead."*"), "\n")
   endif
@@ -28,12 +34,27 @@ function! autojump#completion(ArgLead, CmdLine, CurorPos)
 endfunction
 
 function! autojump#complete(fragment)
-  return system('AUTOJUMP_DATA_DIR=~/.vim autojump '.a:fragment)
+  return system(autojump#autojump_cmd(s:global_dir, a:fragment))
 endfunction
 
 function! autojump#jump(fragment)
   let path = autojump#complete(a:fragment)
   exec 'edit '.path
+endfunction
+
+function! autojump#create_dir(dir)
+  let existing_dir = finddir(a:dir)
+  if existing_dir == ""
+    silent! exec "!mkdir -p ".a:dir
+  endif
+endfunction
+
+function! autojump#create_data_dir()
+  call autojump#create_dir(s:global_dir)
+endfunction
+
+function! autojump#autojump_cmd(data_dir, cmd)
+  return 'AUTOJUMP_DATA_DIR='.a:data_dir.' autojump '.a:cmd
 endfunction
 
 augroup autojump
@@ -48,3 +69,6 @@ command! JumpStat :call autojump#jumpstat()
 " J jumps you to a file
 " usage: J vi  " would possibly open ~/.vimrc
 command! -nargs=1 -complete=customlist,autojump#completion J :call autojump#jump(<f-args>)
+
+" Go ahead and create the data directory
+call autojump#create_data_dir()
