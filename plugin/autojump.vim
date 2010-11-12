@@ -41,5 +41,10 @@ augroup autojump
   autocmd BufNewFile,BufRead,BufWrite * call autojump#store_file('<amatch>')
 augroup END
 
+" JumpStat will list which files are the most used
+" usage: JumpStat
 command! JumpStat :call autojump#jumpstat()
+
+" J jumps you to a file
+" usage: J vi  " would possibly open ~/.vimrc
 command! -nargs=1 -complete=customlist,autojump#completion J :call autojump#jump(<f-args>)
