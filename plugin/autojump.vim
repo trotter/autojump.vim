@@ -9,6 +9,14 @@ if exists("g:loaded_autojump") || &cp
 endif
 let g:loaded_autojump = 1
 
+let has_autojump=system("which autojump")
+if has_autojump == ""
+  echo "It seems you're missing autojump (http://github.com/joelthelion/autojump)"
+  echo "autojump.vim won't work without it"
+  echo "Sad Panda"
+  finish
+end
+
 " The root directory in which we will store all autojump files
 let s:data_dir=expand("~/.autojump.vim")
 let s:global_dir=expand(s:data_dir.'/global')
