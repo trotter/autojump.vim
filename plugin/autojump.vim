@@ -16,8 +16,8 @@ let s:project_dir=expand(s:data_dir.'/projects/'.getcwd())
 
 " Stores an opened buffer in autojumps history
 function! autojump#store_file(path)
-  silent! exec '!'.autojump#autojump_cmd(s:project_dir, '-a '.a:path)
-  silent! exec '!'.autojump#autojump_cmd(s:global_dir, '-a '.a:path)
+  silent! exec '!'.autojump#autojump_cmd(s:project_dir, '-a "'.a:path.'"')
+  silent! exec '!'.autojump#autojump_cmd(s:global_dir, '-a "'.a:path.'"')
 endfunction
 
 " Show the current jumpstats
@@ -27,7 +27,7 @@ function! autojump#jumpstat()
 endfunction
 
 function! autojump#completion_for(dir, ArgLead, CmdLine, CursorPos)
-  let paths = system(autojump#autojump_cmd(a:dir, '--completion '.a:ArgLead))
+  let paths = system(autojump#autojump_cmd(a:dir, '--completion "'.a:ArgLead.'"'))
   return split(paths, "\n")
 endfunction
 
@@ -46,16 +46,16 @@ function! autojump#completion(ArgLead, CmdLine, CursorPos)
   endif
 
   " Fallback to normal file completion
-  return split(globpath(&path, a:ArgLead."*"), "\n")
+  return split(globpath(getcwd(), a:ArgLead."*"), "\n")
 endfunction
 
 function! autojump#complete(fragment)
-  let path = system(autojump#autojump_cmd(s:project_dir, a:fragment))
+  let path = system(autojump#autojump_cmd(s:project_dir, '"'.a:fragment.'"'))
   if path != ""
     return path
   end
 
-  path = system(autojump#autojump_cmd(s:global_dir, a:fragment))
+  let path = system(autojump#autojump_cmd(s:global_dir, '"'.a:fragment.'"'))
   if path != ""
     return path
   end
