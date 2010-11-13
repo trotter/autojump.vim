@@ -1,6 +1,6 @@
 " autojump.vim - Easy file navigation
 " Maintainer: Trotter Cashion <cashion@gmail.com>
-" Version:    0.3
+" Version:    0.3.1
 
 " Install in ~/.vim/autoload
 
@@ -11,7 +11,7 @@ let g:loaded_autojump = 1
 
 let has_autojump=system("which autojump")
 if has_autojump == ""
-  echo "It seems you're missing autojump (http://github.com/joelthelion/autojump)"
+  echo "It seems you're missing autojump (https://github.com/joelthelion/autojump)"
   echo "autojump.vim won't work without it"
   echo "Sad Panda"
   finish
