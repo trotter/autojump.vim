@@ -4,10 +4,10 @@
 
 " Install in ~/.vim/autoload
 
-" if exists("g:loaded_autojump") || &cp
-"   finish
-" endif
-" let g:loaded_autojump = 1
+if exists("g:loaded_autojump") || &cp
+  finish
+endif
+let g:loaded_autojump = 1
 
 " The root directory in which we will store all autojump files
 let s:data_dir=expand("~/.autojump.vim")
