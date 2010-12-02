@@ -1,6 +1,6 @@
 " autojump.vim - Easy file navigation
 " Maintainer: Trotter Cashion <cashion@gmail.com>
-" Version:    0.3.1
+" Version:    0.3.2
 
 " Install in ~/.vim/autoload
 
