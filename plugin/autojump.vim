@@ -54,7 +54,12 @@ function! autojump#completion(ArgLead, CmdLine, CursorPos)
   endif
 
   " Fallback to normal file completion
-  return split(globpath(getcwd(), a:ArgLead."*"), "\n")
+  return autojump#fallback_completion_for(a:ArgLead, a:CmdLine, a:CursorPos)
+endfunction
+
+function! autojump#fallback_completion_for(ArgLead, CmdLine, CursorPos)
+  let matches = split(globpath(",", a:ArgLead."*"), "\n")
+  return map(matches, 'isdirectory(v:val) ? v:val."/" : v:val')
 endfunction
 
 function! autojump#complete(fragment)
