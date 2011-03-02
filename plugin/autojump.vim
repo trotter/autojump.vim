@@ -84,7 +84,7 @@ endfunction
 function! autojump#create_dir(dir)
   let existing_dir = finddir(a:dir)
   if existing_dir == ""
-    silent! exec "!mkdir -p ".a:dir
+    silent! exec '!mkdir -p "'.a:dir.'"'
   endif
 endfunction
 
@@ -94,12 +94,12 @@ function! autojump#create_data_dir()
 endfunction
 
 function! autojump#autojump_cmd(data_dir, cmd)
-  return 'AUTOJUMP_DATA_DIR='.a:data_dir.' autojump '.a:cmd
+  return 'AUTOJUMP_DATA_DIR="'.a:data_dir.'" autojump '.a:cmd
 endfunction
 
 augroup autojump
   autocmd!
-  autocmd BufNewFile,BufRead,BufWrite * call autojump#store_file('<amatch>')
+  autocmd BufNewFile,BufRead,BufWritePost * call autojump#store_file('<amatch>')
 augroup END
 
 " JumpStat will list which files are the most used
