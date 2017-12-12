@@ -76,9 +76,15 @@ function! autojump#complete(fragment)
   return a:fragment
 endfunction
 
-function! autojump#jump(fragment)
+function! autojump#jump(fragment, type)
   let path = autojump#complete(a:fragment)
-  exec 'edit '.path
+  if a:type == 'h'
+    exec 'sp '.path
+  elseif a:type == 'v'
+    exec 'vs '.path
+  else
+    exec 'edit '.path
+  endif
 endfunction
 
 function! autojump#create_dir(dir)
@@ -108,7 +114,9 @@ command! JumpStat :call autojump#jumpstat()
 
 " J jumps you to a file
 " usage: J vi  " would possibly open ~/.vimrc
-command! -nargs=1 -complete=customlist,autojump#completion J :call autojump#jump(<f-args>)
+command! -nargs=1 -complete=customlist,autojump#completion J :call autojump#jump(<f-args>, 'J')
+command! -nargs=1 -complete=customlist,autojump#completion Jh :call autojump#jump(<f-args>, 'h')
+command! -nargs=1 -complete=customlist,autojump#completion Jv :call autojump#jump(<f-args>, 'v')
 
 " Go ahead and create the data directory
 call autojump#create_data_dir()
