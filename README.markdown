@@ -28,6 +28,9 @@ function that you can incorporate into your .profile or .bashrc (or whatever
 you use). Use it in the same way you use `:J`, though it currently only
 supports global matches.
 
+If you're using NERDTree you can set `g:autojump_open_command` to `NERDTree` to
+toggle NERDTree on autojump target.
+
 Requirements
 ------------
 
