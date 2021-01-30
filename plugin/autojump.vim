@@ -14,10 +14,6 @@ if !exists( "g:autojump_command" )
   let g:autojump_command = s:default_command
 endif
 
-if !exists(g:autojump_command)
-  let g:autojump_command = s:default_command
-endif
-
 let has_autojump=system("which autojump")
 if has_autojump == ""
   echo "It seems you're missing autojump (https://github.com/joelthelion/autojump)"
@@ -87,7 +83,13 @@ endfunction
 
 function! autojump#jump(fragment)
   let path = autojump#complete(a:fragment)
-  exec g:autojump_command.' '.path
+  let command = s:default_command
+
+  if exists(g:autojump_command)
+    let command = g:autojump_command
+  endif
+
+  exec command.' '.path
 endfunction
 
 function! autojump#create_dir(dir)
