@@ -8,10 +8,14 @@ if exists("g:loaded_autojump") || &cp
   finish
 endif
 let g:loaded_autojump = 1
-if exists( "g_autojump_open_command" )
-  let s:open_command = g:autojump_open_command
-else
-  let s:open_command = 'edit'
+let s:default_command = 'edit'
+
+if !exists( "g:autojump_command" )
+  let g:autojump_command = s:default_command
+endif
+
+if !exists(g:autojump_command)
+  let g:autojump_command = s:default_command
 endif
 
 let has_autojump=system("which autojump")
@@ -83,7 +87,7 @@ endfunction
 
 function! autojump#jump(fragment)
   let path = autojump#complete(a:fragment)
-  exec g:autojump_open_command.' '.path
+  exec g:autojump_command.' '.path
 endfunction
 
 function! autojump#create_dir(dir)
